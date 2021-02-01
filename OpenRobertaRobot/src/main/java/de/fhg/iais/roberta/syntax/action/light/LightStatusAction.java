@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
 
 /**
  * This class represents the <b>robActions_brickLight_off</b> and <b>robActions_brickLight_reset</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -65,11 +63,6 @@ public class LightStatusAction<V> extends Action<V> {
      */
     public String getPort() {
         return this.port;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILightVisitor<V>) visitor).visitLightStatusAction(this);
     }
 
     /**

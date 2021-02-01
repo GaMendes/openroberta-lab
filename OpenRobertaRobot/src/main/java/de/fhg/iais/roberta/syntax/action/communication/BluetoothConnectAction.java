@@ -18,8 +18,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 
 public class BluetoothConnectAction<V> extends Action<V> {
     private final Expr<V> _address;
@@ -49,11 +47,6 @@ public class BluetoothConnectAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "BluetoothConnectAction [" + getAddress().toString() + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IBluetoothVisitor<V>) visitor).visitBluetoothConnectAction(this);
     }
 
     /**

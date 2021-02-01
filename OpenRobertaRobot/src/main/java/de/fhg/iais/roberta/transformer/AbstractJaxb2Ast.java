@@ -96,7 +96,7 @@ abstract public class AbstractJaxb2Ast<V> {
         String op = Jaxb2Ast.getOperation(block, operationType);
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+        return Unary.make(Unary.Op.get(op), AbstractJaxb2Ast.convertPhraseToExpr(expr), Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
     }
 
     /**
@@ -122,8 +122,8 @@ abstract public class AbstractJaxb2Ast<V> {
         return Binary
             .make(
                 Binary.Op.get(op),
-                convertPhraseToExpr(left),
-                convertPhraseToExpr(right),
+                AbstractJaxb2Ast.convertPhraseToExpr(left),
+                AbstractJaxb2Ast.convertPhraseToExpr(right),
                 operationRange,
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
@@ -143,7 +143,7 @@ abstract public class AbstractJaxb2Ast<V> {
         List<Expr<V>> params = new ArrayList<>();
         List<Value> values = Jaxb2Ast.extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
-            params.add(convertPhraseToExpr(extractValue(values, exprParam)));
+            params.add(AbstractJaxb2Ast.convertPhraseToExpr(extractValue(values, exprParam)));
         }
         return params;
     }
@@ -180,7 +180,7 @@ abstract public class AbstractJaxb2Ast<V> {
                 elseList = extractStatement(statements, BlocklyConstants.ELSE);
             } else {
                 Phrase<V> p = extractValue(values, new ExprParam(BlocklyConstants.IF + i, BlocklyType.BOOLEAN));
-                exprsList.add(convertPhraseToExpr(p));
+                exprsList.add(AbstractJaxb2Ast.convertPhraseToExpr(p));
                 thenList.add(extractStatement(statements, BlocklyConstants.DO + i));
             }
         }
@@ -249,7 +249,7 @@ abstract public class AbstractJaxb2Ast<V> {
      *
      * @param p to be converted to expression
      */
-    public Expr<V> convertPhraseToExpr(Phrase<V> p) {
+    public static <V> Expr<V> convertPhraseToExpr(Phrase<V> p) {
         Expr<V> expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
             expr = SensorExpr.make((Sensor<V>) p);
@@ -277,7 +277,7 @@ abstract public class AbstractJaxb2Ast<V> {
     public ExprList<V> valuesToExprList(List<Value> values, BlocklyType[] parametersTypes, int nItems, String name) {
         ExprList<V> exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, parametersTypes[i]))));
+            exprList.addExpr(AbstractJaxb2Ast.convertPhraseToExpr(extractValue(values, new ExprParam(name + i, parametersTypes[i]))));
         }
         exprList.setReadOnly();
         return exprList;
@@ -377,9 +377,9 @@ abstract public class AbstractJaxb2Ast<V> {
         if ( shadow != null ) {
             Block shadowBlock = AbstractJaxb2Ast.shadow2block(shadow);
             if ( block != null ) {
-                return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)), convertPhraseToExpr(blockToAST(block)));
+                return ShadowExpr.make(AbstractJaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)), AbstractJaxb2Ast.convertPhraseToExpr(blockToAST(block)));
             }
-            return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)));
+            return ShadowExpr.make(AbstractJaxb2Ast.convertPhraseToExpr(blockToAST(shadowBlock)));
         } else {
             return blockToAST(block);
         }
@@ -401,7 +401,7 @@ abstract public class AbstractJaxb2Ast<V> {
 
             p = blockToAST(exb);
 
-            exprList.addExpr(convertPhraseToExpr(p));
+            exprList.addExpr(AbstractJaxb2Ast.convertPhraseToExpr(p));
         }
         exprList.setReadOnly();
         return exprList;
@@ -433,7 +433,12 @@ abstract public class AbstractJaxb2Ast<V> {
         List<Statement> statements = Jaxb2Ast.extractStatements(block, (short) mutation);
         StmtList<V> stmtList = extractStatement(statements, location);
         return RepeatStmt
-            .make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, Jaxb2Ast.extractBlockProperties(block), Jaxb2Ast.extractComment(block));
+            .make(
+                RepeatStmt.Mode.get(mode),
+                AbstractJaxb2Ast.convertPhraseToExpr(expr),
+                stmtList,
+                Jaxb2Ast.extractBlockProperties(block),
+                Jaxb2Ast.extractComment(block));
     }
 
     private static Block shadow2block(Shadow shadow) {

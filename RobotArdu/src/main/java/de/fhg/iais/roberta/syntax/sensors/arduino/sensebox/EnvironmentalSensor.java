@@ -9,19 +9,12 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class EnvironmentalSensor<V> extends ExternalSensor<V> {
 
     private EnvironmentalSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("ENVIRONMENTAL"), properties, comment);
         setReadOnly();
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitEnvironmentalSensor(this);
     }
 
     public static <V> EnvironmentalSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {

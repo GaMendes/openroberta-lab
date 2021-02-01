@@ -207,7 +207,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         String port = getDevicePortName(accelerometerSensor);
         this.sb.append("hal.sample_accelerometer_sensor(").append(port).append(")");
         return null;

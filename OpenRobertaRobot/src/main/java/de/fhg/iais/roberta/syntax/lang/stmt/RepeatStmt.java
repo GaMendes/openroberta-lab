@@ -29,8 +29,6 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>repeat statement</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate repeat
@@ -95,11 +93,6 @@ public class RepeatStmt<V> extends Stmt<V> {
         sb.append(this.list.toString());
         appendNewLine(sb, 0, ")");
         return sb.toString();
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitRepeatStmt(this);
     }
 
     /**

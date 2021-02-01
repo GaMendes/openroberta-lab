@@ -5,17 +5,16 @@
  */
 package de.fhg.iais.roberta.generated.restEntities;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
- * full request for the /init call with initToken, logging and request data<br>
- * <br>
+ * full request for the /init call with initToken, logging and request data<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -64,8 +63,8 @@ public class FullRestRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public FullRestRequest merge(JSONObject jsonO) {
@@ -118,13 +117,13 @@ public class FullRestRequest {
         if ( !this.immutable ) {
             _message = "FullRestRequest-object is already immutable: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of FullRestRequest-object is not set: " + toString();
         }
-        if ( this.log == null ) {
+        if ( log == null ) {
             _message = "required property log of FullRestRequest-object is not set: " + toString();
         }
-        if ( this.data == null ) {
+        if ( data == null ) {
             _message = "required property data of FullRestRequest-object is not set: " + toString();
         }
         if ( _message != null ) {

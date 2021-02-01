@@ -22,8 +22,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree). Object from
@@ -124,11 +122,6 @@ public final class MotorOnAction<V> extends MoveAction<V> {
     @Override
     public String toString() {
         return "MotorOnAction [" + getUserDefinedPort() + ", " + this.param + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMotorVisitor<V>) visitor).visitMotorOnAction(this);
     }
 
     @Override

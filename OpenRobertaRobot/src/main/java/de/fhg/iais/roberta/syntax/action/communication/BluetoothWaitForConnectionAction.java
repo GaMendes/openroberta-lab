@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 
 public class BluetoothWaitForConnectionAction<V> extends Action<V> {
 
@@ -34,11 +32,6 @@ public class BluetoothWaitForConnectionAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "BluetoothWaitForConnectionAction []";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IBluetoothVisitor<V>) visitor).visitBluetoothWaitForConnectionAction(this);
     }
 
     /**

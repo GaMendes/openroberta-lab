@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>text_join</b> block from Blockly into the AST (abstract syntax tree).<br>
@@ -64,11 +62,6 @@ public class TextJoinFunct<V> extends Function<V> {
     @Override
     public Assoc getAssoc() {
         return Assoc.LEFT;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitTextJoinFunct(this);
     }
 
     @Override

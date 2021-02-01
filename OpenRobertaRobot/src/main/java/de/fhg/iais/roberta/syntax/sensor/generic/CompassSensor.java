@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * This class represents the <b>robSensors_compass_getSample</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -44,11 +42,6 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      */
     public static <V> CompassSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new CompassSensor<>(sensorMetaDataBean, properties, comment);
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitCompassSensor(this);
     }
 
     /**

@@ -9,8 +9,6 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 /**
  * This class represents <b>robSensors_irseeker_getSample</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -38,11 +36,6 @@ public class IRSeekerSensor<V> extends ExternalSensor<V> {
      */
     public static <V> IRSeekerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new IRSeekerSensor<V>(sensorMetaDataBean, properties, comment);
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitIRSeekerSensor(this);
     }
 
     /**

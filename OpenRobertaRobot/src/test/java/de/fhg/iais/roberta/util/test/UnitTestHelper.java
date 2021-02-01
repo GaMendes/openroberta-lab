@@ -60,7 +60,8 @@ public final class UnitTestHelper {
         ConfigurationAst configuration,
         String expectedSource,
         String programXmlFilename,
-        IWorker... workers) {
+        IWorker... workers) //
+    {
         String programXml = Util.readResourceContent(programXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         builder.setConfigurationAst(configuration);
@@ -244,6 +245,23 @@ public final class UnitTestHelper {
         builder.setConfigurationAst(configurationAst);
         builder.setWithWrapping(withWrapping);
         checkGeneratedSourceEquality(factory, expectedSource, builder.build());
+    }
+
+    public static String  generateSourceWithProgramXml(
+        IRobotFactory factory,
+        String programXmlFilename,
+        ConfigurationAst configurationAst,
+        boolean withWrapping) {
+        String programXml = Util.readResourceContent(programXmlFilename);
+        Project.Builder builder = setupWithProgramXML(factory, programXml);
+        builder.setConfigurationAst(configurationAst);
+        builder.setWithWrapping(withWrapping);
+        return generateSource(factory,builder.build());
+    }
+
+    public static String generateSource(IRobotFactory factory,Project project) {
+        executeWorkflow("showsource", factory, project);
+        return project.getSourceCode().toString();
     }
 
     private static void checkGeneratedSourceEquality(IRobotFactory factory, String expectedSource, Project project) {

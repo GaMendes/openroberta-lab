@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 
 public class ReceiveIRAction<V> extends Action<V> {
 
@@ -35,11 +33,6 @@ public class ReceiveIRAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "ReceiveIRAction";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IEdisonVisitor<V>) visitor).visitReceiveIRAction(this);
     }
 
     /**

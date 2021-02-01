@@ -15,6 +15,8 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
+import javax.annotation.Nonnull;
+
 public class Jaxb2Ast {
     private Jaxb2Ast() {
     }
@@ -139,16 +141,14 @@ public class Jaxb2Ast {
     }
 
     /**
-     * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default {@link Value}.<br>
-     * <br>
-     * Throws {@link DbcException} if the field is not found and the defaultValue is set to <b>null</b>.
-     *
-     * @param fields as a source
+     * Extract field from list of {@link Field}. If the field with the given name is not found or it is empty, it returns the default Value.<br>
+      *
+     * @param fields list as a source
      * @param name of the field to be extracted
-     * @param defaultValue if the field is not existent
-     * @return value containing the field
+     * @param defaultValue if the field does not existent
+     * @return value of the field
      */
-    public static String extractNonEmptyField(List<Field> fields, String name, String defaultValue) {
+    public static String extractNonEmptyField(List<Field> fields, String name, @Nonnull String defaultValue) {
         Assert.notNull(defaultValue);
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {

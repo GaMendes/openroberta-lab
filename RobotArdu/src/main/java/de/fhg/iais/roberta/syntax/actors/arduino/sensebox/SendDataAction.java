@@ -20,8 +20,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class SendDataAction<V> extends Action<V> {
 
@@ -53,11 +51,6 @@ public class SendDataAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "DataSendAction []";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitDataSendAction(this);
     }
 
     public List<Pair<String, Expr<V>>> getId2Phenomena() {

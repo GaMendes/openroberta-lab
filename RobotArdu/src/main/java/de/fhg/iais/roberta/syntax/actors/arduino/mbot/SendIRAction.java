@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
  * This class represents the <b>robCommunication_ir_sendblock</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
@@ -52,11 +50,6 @@ public class SendIRAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "LedOnAction [ " + this.message + " ]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitSendIRAction(this);
     }
 
     public Expr<V> getMessage() {

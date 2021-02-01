@@ -19,8 +19,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_setPower</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -61,11 +59,6 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
     @Override
     public String toString() {
         return "MotorSetPowerAction [port=" + getUserDefinedPort() + ", power=" + this.power + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMotorVisitor<V>) visitor).visitMotorSetPowerAction(this);
     }
 
     /**

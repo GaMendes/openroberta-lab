@@ -102,8 +102,8 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.collect.CalliopeMethods;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.CalliopeMethods;
+import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
 
 /**
@@ -701,7 +701,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             nlIndent();
             this.sb.append("_uBit.radio.enable();");
         }
-        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ACCELEROMETER) ) {
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ACCELEROMETER) || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COMPASS) ) {
             nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
         }
@@ -977,7 +977,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_uBit.accelerometer.get");
         if ( accelerometerSensor.getSlot().equals("STRENGTH") ) {
             this.sb.append("Strength");

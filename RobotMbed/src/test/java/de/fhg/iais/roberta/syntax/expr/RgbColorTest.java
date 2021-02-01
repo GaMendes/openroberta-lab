@@ -10,8 +10,7 @@ public class RgbColorTest extends CalliopeAstTest {
     @Test
     public void make_ByDefault_ReturnInstancesOfRgbColorClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=163, y=37], MainTask [], "
-                + "DisplayTextAction [TEXT, RgbColor [NumConst [20], NumConst [25], NumConst [30], NumConst [30]]]]]]";
+            "BlockAST[project=[[Location[x=163,y=37],MainTask[],DisplayTextAction[TEXT,RgbColor[R:NumConst[20],G:NumConst[25],B:NumConst[30],A:NumConst[30]]]]]]";
         UnitTestHelper.checkProgramAstEquality(testFactory, expectedResult, "/expr/create_color.xml");
 
     }

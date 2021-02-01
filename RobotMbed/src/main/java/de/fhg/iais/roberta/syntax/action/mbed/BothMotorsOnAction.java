@@ -19,14 +19,15 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
- * This class represents the <b>mbedActions_single_motor_on</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate
- * code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
+ * This class represents the <b>mbedActions_single_motor_on</b> block from
+ * Blockly into the AST (abstract syntax tree). Object from this class will
+ * generate code for setting the motor speed and type of movement connected on
+ * given port and turn the motor on.<br/>
  * <br/>
- * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
+ * The client must provide the {@link ActorPort} and {@link MotionParam} (number
+ * of rotations or degrees and speed).
  */
 public final class BothMotorsOnAction<V> extends Action<V> {
     private final Expr<V> speedA;
@@ -109,11 +110,6 @@ public final class BothMotorsOnAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "BothMotorsOnAction [" + this.portA + ", " + this.speedA + ", " + this.portB + ", " + this.speedB + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitBothMotorsOnAction(this);
     }
 
     @Override

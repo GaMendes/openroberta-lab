@@ -447,7 +447,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_bmx055_").append(accelerometerSensor.getPort()).append(".getAcceleration").append(accelerometerSensor.getMode()).append("()");
         return null;
     }
@@ -519,7 +519,7 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
     }
 
     @Override
-    public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
         if ( sendDataAction.getDestination().equals("SENSEMAP") ) {
             for ( Pair<String, Expr<Void>> entry : sendDataAction.getId2Phenomena() ) {
                 this.sb.append("_osm.uploadMeasurement(");

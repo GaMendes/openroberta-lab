@@ -23,8 +23,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 /**
  * This class represents <b>mbedImage_shift</b> blocks from Blockly into the AST (abstract syntax tree).<br>
@@ -103,12 +101,6 @@ public class LEDMatrixImageShiftFunction<V> extends Function<V> {
     @Override
     public BlocklyType getReturnType() {
         return BlocklyType.VOID;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitLEDMatrixImageShiftFunction(this);
-
     }
 
     @Override

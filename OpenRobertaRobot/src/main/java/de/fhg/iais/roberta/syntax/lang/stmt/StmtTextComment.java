@@ -13,8 +13,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>text_comment</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for an
@@ -53,11 +51,6 @@ public class StmtTextComment<V> extends Stmt<V> {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, "StmtTextComment [" + this.textComment + "]");
         return sb.toString();
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitStmtTextComment(this);
     }
 
     /**

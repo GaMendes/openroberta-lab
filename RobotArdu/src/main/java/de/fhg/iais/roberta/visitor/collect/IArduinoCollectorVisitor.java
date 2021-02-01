@@ -48,7 +48,7 @@ public interface IArduinoCollectorVisitor extends ICollectorVisitor, IArduinoVis
     }
 
     @Override
-    default Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+    default Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
         sendDataAction.getId2Phenomena().forEach(stringExprPair -> {
             stringExprPair.getSecond().accept(this);
         });

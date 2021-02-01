@@ -20,7 +20,7 @@ public interface IArduinoVisitor<V>
         throw new DbcException("Block is not implemented!");
     }
 
-    default V visitDataSendAction(SendDataAction<V> sendDataAction) {
+    default V visitSendDataAction(SendDataAction<V> sendDataAction) {
         throw new DbcException("Block is not implemented!");
     }
 

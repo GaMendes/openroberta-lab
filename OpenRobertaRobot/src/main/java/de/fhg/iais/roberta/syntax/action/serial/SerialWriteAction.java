@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISerialVisitor;
 
 public class SerialWriteAction<V> extends Action<V> {
 
@@ -64,11 +62,6 @@ public class SerialWriteAction<V> extends Action<V> {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.OUT, this.value);
         return jaxbDestination;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISerialVisitor<V>) visitor).visitSerialWriteAction(this);
     }
 
 }

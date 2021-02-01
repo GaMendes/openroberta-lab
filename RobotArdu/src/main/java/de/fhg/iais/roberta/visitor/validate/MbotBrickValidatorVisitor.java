@@ -98,7 +98,7 @@ public final class MbotBrickValidatorVisitor extends AbstractBrickValidatorVisit
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
         checkSensorPort(accelerometer);
         return null;
     }

@@ -172,7 +172,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         this
             .getBuilder(UsedHardwareBean.Builder.class)
             .addUsedSensor(new UsedSensor(accelerometerSensor.getPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));

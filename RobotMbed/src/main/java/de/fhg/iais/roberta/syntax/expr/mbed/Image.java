@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
  * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate image.<br/>
@@ -81,12 +79,6 @@ public class Image<V> extends Expr<V> {
             + "\n"
             + Arrays.toString(this.image[4])
             + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitImage(this);
-
     }
 
     /**

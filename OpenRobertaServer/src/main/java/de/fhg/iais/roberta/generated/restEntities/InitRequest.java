@@ -5,17 +5,16 @@
  */
 package de.fhg.iais.roberta.generated.restEntities;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
- * full request for the /init REST request with logging and request data, but no initToken<br>
- * <br>
+ * full request for the /init REST request with logging and request data, but no initToken<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
@@ -62,8 +61,8 @@ public class InitRequest {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public InitRequest merge(JSONObject jsonO) {
@@ -114,10 +113,10 @@ public class InitRequest {
         if ( !this.immutable ) {
             _message = "InitRequest-object is already immutable: " + toString();
         }
-        if ( this.log == null ) {
+        if ( log == null ) {
             _message = "required property log of InitRequest-object is not set: " + toString();
         }
-        if ( this.data == null ) {
+        if ( data == null ) {
             _message = "required property data of InitRequest-object is not set: " + toString();
         }
         if ( _message != null ) {

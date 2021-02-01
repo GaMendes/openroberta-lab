@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>controls_flow_statements</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -95,11 +93,6 @@ public class StmtFlowCon<V> extends Stmt<V> {
             }
             throw new DbcException("Invalid flow kind: " + s);
         }
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitStmtFlowCon(this);
     }
 
     /**

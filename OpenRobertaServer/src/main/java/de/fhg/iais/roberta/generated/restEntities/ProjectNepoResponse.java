@@ -5,25 +5,22 @@
  */
 package de.fhg.iais.roberta.generated.restEntities;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
- * the response for the /projectWorkflow/run and ../compileProgram REST request<br>
- * <br>
+ * the response for the /projectWorkflow/run and ../compileProgram REST request<br><br>
  * Version: 1<br>
  * Datum: 2020-06-15
  */
 public class ProjectNepoResponse extends BaseResponse {
     protected String programName;
     protected String progXML;
-    protected int errorCounter;
-    protected boolean errorCounterDefined = false;
     protected Map<String, JSONObject> confAnnos;
     protected String compiledCode;
 
@@ -69,7 +66,6 @@ public class ProjectNepoResponse extends BaseResponse {
         boolean notificationsAvailable,
         String programName,
         String progXML,
-        int errorCounter,
         Map<String, JSONObject> confAnnos,
         String compiledCode) {
         ProjectNepoResponse entity = new ProjectNepoResponse();
@@ -92,7 +88,6 @@ public class ProjectNepoResponse extends BaseResponse {
         entity.setNotificationsAvailable(notificationsAvailable);
         entity.setProgramName(programName);
         entity.setProgXML(progXML);
-        entity.setErrorCounter(errorCounter);
         entity.setConfAnnos(confAnnos);
         entity.setCompiledCode(compiledCode);
         entity.immutable();
@@ -107,11 +102,10 @@ public class ProjectNepoResponse extends BaseResponse {
     }
 
     /**
-     * merge the properties of a JSON-object into this bean. The bean must be "under construction". The keys of the JSON-Object must be valid. The bean remains
-     * "under construction".<br>
+     * merge the properties of a JSON-object into this bean. The bean must be "under construction".
+     * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ProjectNepoResponse merge(JSONObject jsonO) {
         try {
             for ( String key : JSONObject.getNames(jsonO) ) {
@@ -154,8 +148,6 @@ public class ProjectNepoResponse extends BaseResponse {
                     setProgramName(jsonO.optString(key));
                 } else if ( "progXML".equals(key) ) {
                     setProgXML(jsonO.optString(key));
-                } else if ( "errorCounter".equals(key) ) {
-                    setErrorCounter(jsonO.getInt(key));
                 } else if ( "confAnnos".equals(key) ) {
                     JSONObject map = jsonO.optJSONObject(key);
                     if ( map != null ) {
@@ -182,7 +174,6 @@ public class ProjectNepoResponse extends BaseResponse {
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public ProjectNepoResponse immutable() {
         if ( this.immutable ) {
             return this;
@@ -200,22 +191,19 @@ public class ProjectNepoResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "ProjectNepoResponse-object is already immutable: " + toString();
         }
-        if ( this.rc == null ) {
+        if ( rc == null ) {
             _message = "required property rc of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( this.initToken == null ) {
+        if ( initToken == null ) {
             _message = "required property initToken of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( !this.serverTimeDefined ) {
+        if ( !serverTimeDefined ) {
             _message = "required property serverTime of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( this.serverVersion == null ) {
+        if ( serverVersion == null ) {
             _message = "required property serverVersion of ProjectNepoResponse-object is not set: " + toString();
         }
-        if ( !this.errorCounterDefined ) {
-            _message = "required property errorCounter of ProjectNepoResponse-object is not set: " + toString();
-        }
-        if ( this.compiledCode == null ) {
+        if ( compiledCode == null ) {
             _message = "required property compiledCode of ProjectNepoResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -282,28 +270,6 @@ public class ProjectNepoResponse extends BaseResponse {
             throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
-        return this;
-    }
-
-    /**
-     * GET errorCounter. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public int getErrorCounter() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no errorCounter from an object under construction: " + toString());
-        }
-        return this.errorCounter;
-    }
-
-    /**
-     * SET errorCounter. Object must be mutable.
-     */
-    public ProjectNepoResponse setErrorCounter(int errorCounter) {
-        if ( this.immutable ) {
-            throw new RuntimeException("errorCounter assigned to an immutable object: " + toString());
-        }
-        this.errorCounter = errorCounter;
-        this.errorCounterDefined = true;
         return this;
     }
 
@@ -383,7 +349,6 @@ public class ProjectNepoResponse extends BaseResponse {
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
-    @Override
     public JSONObject toJson() {
         if ( !this.immutable ) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
@@ -440,11 +405,10 @@ public class ProjectNepoResponse extends BaseResponse {
             if ( this.progXML != null ) {
                 jsonO.put("progXML", this.progXML);
             }
-            jsonO.put("errorCounter", this.errorCounter);
             if ( this.confAnnos != null ) {
                 {
                     JSONObject map = new JSONObject();
-                    for ( Entry<String, JSONObject> entry : this.confAnnos.entrySet() ) {
+                    for ( Entry<String, JSONObject> entry : confAnnos.entrySet() ) {
                         map.put(entry.getKey(), entry.getValue());
                     }
                     jsonO.put("confAnnos", map);
@@ -459,53 +423,7 @@ public class ProjectNepoResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "ProjectNepoResponse [immutable="
-            + this.immutable
-            + ", cmd="
-            + this.cmd
-            + ", rc="
-            + this.rc
-            + ", message="
-            + this.message
-            + ", cause="
-            + this.cause
-            + ", parameters="
-            + this.parameters
-            + ", initToken="
-            + this.initToken
-            + ", serverTime="
-            + this.serverTime
-            + ", serverVersion="
-            + this.serverVersion
-            + ", robotWait="
-            + this.robotWait
-            + ", robotBattery="
-            + this.robotBattery
-            + ", robotName="
-            + this.robotName
-            + ", robotVersion="
-            + this.robotVersion
-            + ", robotFirmwareName="
-            + this.robotFirmwareName
-            + ", robotSensorvalues="
-            + this.robotSensorvalues
-            + ", robotNepoexitvalue="
-            + this.robotNepoexitvalue
-            + ", robotState="
-            + this.robotState
-            + ", notificationsAvailable="
-            + this.notificationsAvailable
-            + ", programName="
-            + this.programName
-            + ", progXML="
-            + this.progXML
-            + ", errorCounter="
-            + this.errorCounter
-            + ", confAnnos="
-            + this.confAnnos
-            + ", compiledCode="
-            + this.compiledCode
-            + " ]";
+        return "ProjectNepoResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", progXML=" + this.progXML + ", confAnnos=" + this.confAnnos + ", compiledCode=" + this.compiledCode + " ]";
     }
 
     @Override

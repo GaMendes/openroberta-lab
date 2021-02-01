@@ -16,8 +16,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This class represents the <b>naoActions_applyPosture</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -55,11 +53,6 @@ public final class Animation<V> extends Action<V> {
     @Override
     public String toString() {
         return "Animation [" + this.move + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((INaoVisitor<V>) visitor).visitAnimation(this);
     }
 
     /**

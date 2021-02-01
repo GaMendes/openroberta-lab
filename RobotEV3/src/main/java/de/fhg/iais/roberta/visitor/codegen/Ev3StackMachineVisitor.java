@@ -428,7 +428,7 @@ public class Ev3StackMachineVisitor<V> extends AbstractStackMachineVisitor<V> im
     }
 
     @Override
-    public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+    public V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
         return null;
     }
 

@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This class represents the <b>naoSensors_naoMark</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -54,11 +52,6 @@ public final class NaoMarkInformation<V> extends Sensor<V> {
 
     public Expr<V> getNaoMarkId() {
         return this.naoMarkId;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((INaoVisitor<V>) visitor).visitNaoMarkInformation(this);
     }
 
     /**

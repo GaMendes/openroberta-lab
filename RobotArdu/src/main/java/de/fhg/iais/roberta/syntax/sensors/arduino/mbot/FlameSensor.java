@@ -14,8 +14,6 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public final class FlameSensor<V> extends Sensor<V> {
 
@@ -40,11 +38,6 @@ public final class FlameSensor<V> extends Sensor<V> {
 
     public String getPort() {
         return this.port;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbotVisitor<V>) visitor).visitFlameSensor(this);
     }
 
     /**

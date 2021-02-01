@@ -66,7 +66,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.C;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> implements IMbedVisitor<V> {
@@ -353,7 +353,7 @@ public class MbedStackMachineVisitor<V> extends AbstractStackMachineVisitor<V> i
     }
 
     @Override
-    public V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+    public V visitAccelerometerSensor(AccelerometerSensor<V> accelerometerSensor) {
         return null;
     }
 

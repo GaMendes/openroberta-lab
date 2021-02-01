@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.codegen.mbed.calliope;
 
+import de.fhg.iais.roberta.ValidationFileAssertRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.CalliopeAstTest;
@@ -10,34 +12,33 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
 public class CppVisitorTest extends CalliopeAstTest {
 
     private static final String IMPORTS = //
-        "#define_GNU_SOURCE\n\n"
-            + "#include \"MicroBit.h\"" //
-            + "#include \"NEPODefs.h\""
-            + "#include <list>\n"
-            + "#include <array>\n"
-            + "#include <stdlib.h>\n"
-            + "MicroBit_uBit;";
+        "#define _GNU_SOURCE\n\n" +
+            "#include \"MicroBit.h\"\n" +
+            "#include \"NEPODefs.h\"\n" +
+            "#include <list>\n" +
+            "#include <array>\n" +
+            "#include <stdlib.h>\n" +
+            "MicroBit _uBit;";
 
-    private static final String MAIN = "int main() { _uBit.init();";
+    private static final String MAIN = "int main()\n{\n    _uBit.init();";
 
-    private static final String END = "release_fiber();}";
+    private static final String END = "release_fiber();\n}";
+
+    @Rule
+    public ValidationFileAssertRule validationFileAssertRule = new ValidationFileAssertRule("cpp","//MASKED");
 
     @Test
     public void visitMainTask_ByDefault_ReturnsEmptyCppProgram() throws Exception {
-        String expectedResult =
-            "" //
-                + IMPORTS
-                + MAIN
-                + END;
-
-        UnitTestHelper
-            .checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
+        String source = UnitTestHelper
+            .generateSourceWithProgramXml(
                 testFactory,
-                expectedResult,
                 "/task/main_task_no_variables_empty.xml",
                 configuration,
                 true);
-        ;
+
+        validationFileAssertRule.assertThat(source)
+            .mask(IMPORTS, "//IMPORTS")
+            .isEqualToValidationFile();
     }
 
     @Test

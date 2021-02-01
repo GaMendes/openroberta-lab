@@ -61,7 +61,7 @@ public final class SenseboxUsedHardwareCollectorVisitor extends AbstractUsedHard
     }
 
     @Override
-    public Void visitDataSendAction(SendDataAction<Void> sendDataAction) {
+    public Void visitSendDataAction(SendDataAction<Void> sendDataAction) {
         // TODO check that WiFi config block is used, otherwise throw an exception
         // and show user the error, that they must use this block in conjunction
         // with WiFi/ethernet/LoRa

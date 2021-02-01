@@ -39,7 +39,7 @@ public class ActionTest extends AstTest {
 
     @Test
     public void clearDisplay() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-69, y=10], MainTask [], ClearDisplayAction []]]]";
+        String a = "BlockAST [project=[[Location [x=-69, y=10], MainTask [], ClearDisplayAction[port:NO_PORT]]]]";
 
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_ClearDisplay.xml");
     }

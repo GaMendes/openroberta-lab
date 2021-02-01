@@ -392,7 +392,7 @@ public class MbedTwo2ThreeTransformerVisitor implements IMbedTransformerVisitor<
     }
 
     @Override
-    public Phrase<Void> visitAccelerometer(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
+    public Phrase<Void> visitAccelerometerSensor(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
         Pair<ConfigurationComponent, String> compAndName =
             this.helper.getComponentAndName(accelerometerSensor.getKind().getName(), accelerometerSensor.getMode(), accelerometerSensor.getPort());
 

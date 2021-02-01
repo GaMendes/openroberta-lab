@@ -13,8 +13,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>logic_boolean</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate boolean
@@ -74,11 +72,6 @@ public class BoolConst<V> extends Expr<V> {
     @Override
     public String toString() {
         return "BoolConst [" + this.value + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitBoolConst(this);
     }
 
     /**

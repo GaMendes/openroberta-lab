@@ -1,6 +1,11 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.lang.reflect.Field;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.transformer.Ast2Jaxb;
+import de.fhg.iais.roberta.transformer.NepoComponent;
+import de.fhg.iais.roberta.transformer.NepoPhrase;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -105,13 +110,8 @@ abstract public class Phrase<V> {
         if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
         }
-        return this.acceptImpl(visitor);
+        return visitor.visit(this);
     }
-
-    /**
-     * accept an visitor
-     */
-    protected abstract V acceptImpl(IVisitor<V> visitor);
 
     /**
      * Can be used to modify the Phrase itself. Used in conjunction with {@link ITransformerVisitor} to replace phrases with copies of themselves or even other
@@ -123,7 +123,7 @@ abstract public class Phrase<V> {
     public final Phrase<Void> modify(ITransformerVisitor<?> visitor) {
         // don't use accept, go over ALL blocks
         @SuppressWarnings("unchecked")
-        V v = this.acceptImpl((IVisitor<V>) visitor);
+        V v = ((IVisitor<V>) visitor).visit(this);
 
         if ( v instanceof Phrase ) {
             @SuppressWarnings("unchecked")
@@ -135,9 +135,71 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * @return converts AST representation of block to JAXB representation of block
+     * converts the AST representation of this block to a JAXB (~~XML) representation<br>
+     * <b>This is the default implementation of annotated AST classes</b>
+     *
+     * @return the JAXB (~~XML) representation
      */
-    public abstract Block astToBlock();
+    public Block astToBlock() {
+        NepoPhrase classAnno = this.getClass().getAnnotation(NepoPhrase.class);
+        if ( classAnno == null ) {
+            throw new DbcException("the default implementation of astToBlock() fails with the NOT annotated class " + this.getClass().getSimpleName());
+        }
+        Block jaxbDestination = new Block();
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        for ( Field field : this.getClass().getDeclaredFields() ) {
+            NepoComponent fieldAnno = field.getAnnotation(NepoComponent.class);
+            if ( fieldAnno != null ) {
+                try {
+                    if ( fieldAnno.isFieldWithDefault().equals(NepoComponent.DEFAULT_FIELD_VALUE) ) {
+                        Ast2Jaxb.addValue(jaxbDestination, fieldAnno.fieldName(), (Phrase<?>) field.get(this));
+                    } else {
+                        Ast2Jaxb.addField(jaxbDestination, fieldAnno.fieldName(), (String) field.get(this));
+                    }
+                } catch ( IllegalArgumentException | IllegalAccessException e ) {
+                    throw new DbcException(
+                        "the field " + fieldAnno.fieldName() + " of the annotated class " + this.getClass().getSimpleName() + " cannot be accessed",
+                        e);
+                }
+            }
+        }
+        return jaxbDestination;
+    }
+
+    /**
+     * the String representation of this phrase. To be used for debugging, not programming!<br>
+     * <b>This is the default implementation of annotated AST classes</b>
+     *
+     * @return the String representation of this phrase
+     */
+    @Override
+    public String toString() {
+        Class<?> clazz = this.getClass();
+        NepoPhrase classAnno = clazz.getAnnotation(NepoPhrase.class);
+        if ( classAnno == null ) {
+            return super.toString();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(clazz.getSimpleName()).append("[");
+        boolean first = true;
+        for ( Field field : clazz.getDeclaredFields() ) {
+            NepoComponent fieldAnno = field.getAnnotation(NepoComponent.class);
+            if ( fieldAnno != null ) {
+                if ( first ) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                try {
+                    sb.append(field.getName()).append(": ").append(field.get(this).toString());
+                } catch ( IllegalArgumentException | IllegalAccessException e ) {
+                    return super.toString();
+                }
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>

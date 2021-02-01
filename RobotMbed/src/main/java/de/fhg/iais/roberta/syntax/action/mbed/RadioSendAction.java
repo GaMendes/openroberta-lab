@@ -18,8 +18,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 public class RadioSendAction<V> extends Action<V> {
     private final Expr<V> message;
@@ -60,11 +58,6 @@ public class RadioSendAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "RadioSendAction [ " + getMsg().toString() + ", " + getType().toString() + ", " + getPower() + " ]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitRadioSendAction(this);
     }
 
     /**

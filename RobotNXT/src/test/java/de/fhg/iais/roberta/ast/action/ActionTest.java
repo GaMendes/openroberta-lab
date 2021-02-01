@@ -14,7 +14,7 @@ public class ActionTest extends NxtAstTest {
 
     @Test
     public void clearDisplay() throws Exception {
-        final String a = "BlockAST [project=[[Location [x=-69, y=10], MainTask [], ClearDisplayAction []]]]";
+        final String a = "BlockAST[project=[[Location[x=-69,y=10],MainTask[],ClearDisplayAction[port:NO_PORT]]]]";
         UnitTestHelper.checkProgramAstEquality(testFactory, a, "/ast/actions/action_ClearDisplay.xml");
     }
 

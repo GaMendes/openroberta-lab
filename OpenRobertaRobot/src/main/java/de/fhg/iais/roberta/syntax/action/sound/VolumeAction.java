@@ -18,8 +18,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 
 /**
  * This class represents the <b>robActions_play_setVolume</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -69,11 +67,6 @@ public class VolumeAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "VolumeAction [" + this.mode + ", " + this.volume + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ISoundVisitor<V>) visitor).visitVolumeAction(this);
     }
 
     /**

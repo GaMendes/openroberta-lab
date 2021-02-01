@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motor_stop</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -63,11 +61,6 @@ public class MotorStopAction<V> extends MoveAction<V> {
         } else {
             return "MotorStop [port=" + getUserDefinedPort() + "]";
         }
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMotorVisitor<V>) visitor).visitMotorStopAction(this);
     }
 
     /**

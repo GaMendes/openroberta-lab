@@ -9,8 +9,6 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This class represents the <b>naoActions_getLanguage</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -38,11 +36,6 @@ public final class GetLanguage<V> extends Action<V> {
     @Override
     public String toString() {
         return "Get Language []";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((INaoVisitor<V>) visitor).visitGetLanguage(this);
     }
 
     /**

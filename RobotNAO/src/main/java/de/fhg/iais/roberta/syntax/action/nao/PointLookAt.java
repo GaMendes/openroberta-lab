@@ -19,8 +19,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**
  * This class represents the <b>naoActions_pointAt</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code for
@@ -109,11 +107,6 @@ public final class PointLookAt<V> extends Action<V> {
     @Override
     public String toString() {
         return "PointLookAt [" + this.frame + ", " + this.pointLook + ", " + this.pointX + ", " + this.pointY + ", " + this.pointZ + ", " + this.speed + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((INaoVisitor<V>) visitor).visitPointLookAt(this);
     }
 
     /**

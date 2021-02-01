@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents the <b>math_random_float</b> block from Blockly into the AST (abstract syntax tree).<br>
@@ -50,11 +48,6 @@ public class MathRandomFloatFunct<V> extends Function<V> {
     @Override
     public BlocklyType getReturnType() {
         return BlocklyType.NUMBER;
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitMathRandomFloatFunct(this);
     }
 
     @Override

@@ -197,7 +197,7 @@ public class TransformerTest extends AstTest {
         Assert.assertEquals("3.0", project.getConfigurationAst().getXmlVersion());
     }
 
-    private static class TestTransformerVisitor implements ITransformerVisitor<Void> {
+    public static class TestTransformerVisitor implements ITransformerVisitor<Void> {
 
         private final BlocklyDropdownFactory blocklyDropdownFactory;
 

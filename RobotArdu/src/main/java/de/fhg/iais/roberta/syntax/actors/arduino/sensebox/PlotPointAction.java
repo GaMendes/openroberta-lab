@@ -18,8 +18,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class PlotPointAction<V> extends Action<V> {
     private final String port;
@@ -60,11 +58,6 @@ public class PlotPointAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "PlotPointAction []";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitPlotPointAction(this);
     }
 
     /**

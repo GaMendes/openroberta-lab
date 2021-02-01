@@ -798,7 +798,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
         this.sb.append("h.accelerometer(");
         this.sb.append(getEnumCode(accelerometer.getPort()));
         this.sb.append(")");
@@ -814,7 +814,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitNaoMark(DetectMarkSensor<Void> detectedMark) {
+    public Void visitDetectMarkSensor(DetectMarkSensor<Void> detectedMark) {
         this.sb.append("h.getDetectedMark");
         if ( detectedMark.getMode().equals(SC.IDALL) ) {
             this.sb.append("s");
@@ -882,7 +882,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
+    public Void visitDetectFaceSensor(DetectFaceSensor<Void> detectFace) {
         this.sb.append("faceRecognitionModule.detectFace");
         if ( detectFace.getMode().equals(SC.NAMEALL) ) {
             this.sb.append("s");
@@ -897,7 +897,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitElectricCurrent(ElectricCurrentSensor<Void> electricCurrent) {
+    public Void visitElectricCurrentSensor(ElectricCurrentSensor<Void> electricCurrent) {
         String side_axis = electricCurrent.getSlot().toString().toLowerCase();
         String[] slots = side_axis.split("_");
 
@@ -1126,7 +1126,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+    public Void visitDetectedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
         this.sb.append("faceRecognitionModule.getFaceInformation(");
         detectedFaceInformation.getFaceName().accept(this);
         this.sb.append(")");

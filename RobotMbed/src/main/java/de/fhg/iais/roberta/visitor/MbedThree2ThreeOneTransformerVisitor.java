@@ -146,7 +146,7 @@ public class MbedThree2ThreeOneTransformerVisitor implements IMbedTransformerVis
     }
 
     @Override
-    public Phrase<Void> visitAccelerometer(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
+    public Phrase<Void> visitAccelerometerSensor(AccelerometerSensor<Phrase<Void>> accelerometerSensor) {
         return AccelerometerSensor.make(getNewBean(accelerometerSensor), accelerometerSensor.getProperty(), accelerometerSensor.getComment());
     }
 

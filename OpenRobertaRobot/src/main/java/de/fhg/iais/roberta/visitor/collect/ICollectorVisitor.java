@@ -684,7 +684,7 @@ public interface ICollectorVisitor extends ISensorVisitor<Void>, IAllActorsVisit
     }
 
     @Override
-    default Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
+    default Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
         return null;
     }
 

@@ -748,7 +748,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      * @return
      */
     @Override
-    public Void visitSensorResetAction(ResetSensor<Void> resetSensor) {
+    public Void visitResetSensor(ResetSensor<Void> resetSensor) {
         switch ( resetSensor.getSensor() ) {
             case "OBSTACLEDETECTOR":
                 this.sb.append("Ed.ReadObstacleDetection()");

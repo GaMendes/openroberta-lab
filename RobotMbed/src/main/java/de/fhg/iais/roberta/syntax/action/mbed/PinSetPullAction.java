@@ -15,8 +15,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 
 /**
  * This class represents the <b>mbedActions_pin_set_pull</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -62,11 +60,6 @@ public class PinSetPullAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "PinSetPullAction [" + this.pinPull + ", " + this.port + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IMbedVisitor<V>) visitor).visitPinSetPullAction(this);
     }
 
     /**

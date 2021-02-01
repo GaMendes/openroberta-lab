@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IEdisonVisitor;
 
 public class SendIRAction<V> extends Action<V> {
     private final Expr<V> code;
@@ -44,11 +42,6 @@ public class SendIRAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "LedOnAction [ " + this.code + " ]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IEdisonVisitor<V>) visitor).visitSendIRAction(this);
     }
 
     public Expr<V> getCode() {

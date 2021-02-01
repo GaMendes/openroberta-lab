@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class RelayAction<V> extends Action<V> {
     private final String port;
@@ -62,11 +60,6 @@ public class RelayAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "RelayAction [" + this.port + ", " + this.mode + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitRelayAction(this);
     }
 
     /**

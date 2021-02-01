@@ -22,8 +22,6 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDifferentialMotorVisitor;
 
 /**
  * This class represents the <b>robActions_motorDiff_turn</b> and <b>robActions_motorDiff_turn_for</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -74,11 +72,6 @@ public class TurnAction<V> extends Action<V> {
     @Override
     public String toString() {
         return "TurnAction [direction=" + this.direction + ", param=" + this.param + "]";
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IDifferentialMotorVisitor<V>) visitor).visitTurnAction(this);
     }
 
     /**

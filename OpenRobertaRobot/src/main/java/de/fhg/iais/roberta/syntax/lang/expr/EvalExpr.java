@@ -30,8 +30,6 @@ import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 /**
  * This class represents blockly eval_expr block in the AST<br>
@@ -104,11 +102,6 @@ public class EvalExpr<V> extends Expr<V> {
     @Override
     public BlocklyType getVarType() {
         return this.exprBlock.getVarType();
-    }
-
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((ILanguageVisitor<V>) visitor).visitEvalExpr(this);
     }
 
     @Override

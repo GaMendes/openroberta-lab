@@ -165,7 +165,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
+    public Void visitCodePadSensor(CodePadSensor<Void> codePadSensor) {
         this.sb.append("rob.getID()");
         return null;
     }

@@ -122,8 +122,8 @@ public class ExprlyBasicAstTest extends AstTest {
     public void colorListTest() throws Exception {
         Expr<Void> e = expr2AST("([getRGB(0,0,0), getRGB(255,255,255,255)])");
         String t = "" + //
-            "RgbColor [NumConst [0], NumConst [0], NumConst [0], EmptyExpr [defVal=NUMBER_INT]], "
-            + "RgbColor [NumConst [255], NumConst [255], NumConst [255], NumConst [255]]";
+            "RgbColor[R: NumConst [0], G: NumConst [0], B: NumConst [0], A: EmptyExpr [defVal=NUMBER_INT]], "
+            + "RgbColor[R: NumConst [255], G: NumConst [255], B: NumConst [255], A: NumConst [255]]";
         test(e, t, BlocklyType.ARRAY_COLOUR);
     }
 

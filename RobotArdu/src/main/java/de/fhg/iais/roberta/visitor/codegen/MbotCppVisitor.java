@@ -400,7 +400,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     }
 
     @Override
-    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometer) {
         this.sb.append("myGyro" + accelerometer.getPort() + ".getAngle" + accelerometer.getMode().toString() + "()");
         return null;
     }

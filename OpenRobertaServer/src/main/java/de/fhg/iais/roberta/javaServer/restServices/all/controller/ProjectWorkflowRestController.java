@@ -119,7 +119,6 @@ public class ProjectWorkflowRestController {
             response.setCompiledCode(project.getCompiledHex());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS
             // TODO which is not mapped to anything in the frontend, ROBOT_PUSH_RUN is mapped to the message that was used before workflows
-            response.setProgXML(project.getAnnotatedProgramAsXml());
             if ( project.getResult() == Key.COMPILERWORKFLOW_SUCCESS || project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS ) {
                 project.setResult(Key.ROBOT_PUSH_RUN);
             }

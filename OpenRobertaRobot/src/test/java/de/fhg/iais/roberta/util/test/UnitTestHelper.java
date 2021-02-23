@@ -174,6 +174,12 @@ public final class UnitTestHelper {
         return project.getProgramAst().getTree();
     }
 
+    public static Phrase<Void> getProgramAstFromExportXml(IRobotFactory factory, String xml) {
+        Project.Builder builder = setupWithExportXML(factory, xml);
+        Project project = builder.build();
+        return project.getProgramAst().getTree().get(0).get(1);
+    }
+
     public static Collection<ConfigurationComponent> getConfigAst(IRobotFactory factory, String configBlocklyXmlFilename) {
         String configXml = Util.readResourceContent(configBlocklyXmlFilename);
         Project.Builder builder = setupWithConfigXML(factory, configXml);

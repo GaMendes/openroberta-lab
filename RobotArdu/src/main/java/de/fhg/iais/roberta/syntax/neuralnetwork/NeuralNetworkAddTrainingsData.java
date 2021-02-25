@@ -40,11 +40,6 @@ public class NeuralNetworkAddTrainingsData<V> extends Stmt<V> {
         return new StringBuilder().append("NeuralNetworkAddTrainingsData [ ").append(this.classNumber).append("]").toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkAddTrainingsData(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *

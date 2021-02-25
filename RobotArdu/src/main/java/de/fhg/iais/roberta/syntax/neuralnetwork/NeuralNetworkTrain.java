@@ -27,11 +27,6 @@ public class NeuralNetworkTrain<V> extends Stmt<V> {
         return "NeuralNetworkTrain []";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkTrain(this);
-
-    }
 
     /**
      * Transformation from JAXB object to corresponding AST object.

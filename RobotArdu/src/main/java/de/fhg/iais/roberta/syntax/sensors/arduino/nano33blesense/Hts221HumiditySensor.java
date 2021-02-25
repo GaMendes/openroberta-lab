@@ -31,11 +31,6 @@ public class Hts221HumiditySensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitHts221HumiditySensor(this);
-    }
-
     public static <V> Hts221HumiditySensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> humidity) {
         return new Hts221HumiditySensor<>(properties, comment, humidity);
     }

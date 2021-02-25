@@ -31,11 +31,6 @@ public class Apds9960GestureSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitApds9960GestureSensor(this);
-    }
-
     public static <V> Apds9960GestureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> gesture) {
         return new Apds9960GestureSensor<>(properties, comment, gesture);
     }

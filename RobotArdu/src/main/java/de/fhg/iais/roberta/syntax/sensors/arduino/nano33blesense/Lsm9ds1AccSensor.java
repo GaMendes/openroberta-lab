@@ -41,11 +41,6 @@ public class Lsm9ds1AccSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitLsm9ds1AccSensor(this);
-    }
-
     public static <V> Lsm9ds1AccSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
         return new Lsm9ds1AccSensor<>(properties, comment, x, y, z);
     }

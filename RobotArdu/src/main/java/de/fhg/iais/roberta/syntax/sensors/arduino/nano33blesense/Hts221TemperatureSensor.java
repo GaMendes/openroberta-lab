@@ -31,11 +31,6 @@ public class Hts221TemperatureSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitHts221TemperatureSensor(this);
-    }
-
     public static <V> Hts221TemperatureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> temperature) {
         return new Hts221TemperatureSensor<>(properties, comment, temperature);
     }

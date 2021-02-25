@@ -31,10 +31,6 @@ public class Apds9960DistanceSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitApds9960DistanceSensor(this);
-    }
 
     public static <V> Apds9960DistanceSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> distance) {
         return new Apds9960DistanceSensor<>(properties, comment, distance);

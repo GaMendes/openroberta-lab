@@ -31,11 +31,6 @@ public class Lps22hbPressureSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitLps22hbPressureSensor(this);
-    }
-
     public static <V> Lps22hbPressureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> pressure) {
         return new Lps22hbPressureSensor<>(properties, comment, pressure);
     }

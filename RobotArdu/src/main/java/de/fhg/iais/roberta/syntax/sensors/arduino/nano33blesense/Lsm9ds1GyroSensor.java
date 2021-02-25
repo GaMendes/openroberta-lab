@@ -41,11 +41,6 @@ public class Lsm9ds1GyroSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitLsm9ds1GyroSensor(this);
-    }
-
     public static <V> Lsm9ds1GyroSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
         return new Lsm9ds1GyroSensor<>(properties, comment, x, y, z);
     }

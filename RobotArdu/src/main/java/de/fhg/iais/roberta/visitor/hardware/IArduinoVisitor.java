@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.*;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public interface IArduinoVisitor<V>
-    extends IMotorVisitor<V>, IDisplayVisitor<V>, ISoundVisitor<V>, ILightVisitor<V>, ISensorVisitor<V>, ISerialVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, INano33BleSensorVisitor<V> {
+    extends IMotorVisitor<V>, IDisplayVisitor<V>, ISimpleSoundVisitor<V>, ILightVisitor<V>, ISensorVisitor<V>, ISerialVisitor<V>, IPinVisitor<V>, INeuralNetworkVisitor<V>, INano33BleSensorVisitor<V> {
 
     default V visitRelayAction(RelayAction<V> relayAction) {
         throw new DbcException("Block is not implemented!");

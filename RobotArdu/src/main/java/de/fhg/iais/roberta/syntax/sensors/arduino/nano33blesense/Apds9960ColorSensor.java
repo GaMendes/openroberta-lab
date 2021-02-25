@@ -41,11 +41,6 @@ public class Apds9960ColorSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitApds9960ColorSensor(this);
-    }
-
     public static <V> Apds9960ColorSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> r, Var<V> g, Var<V> b) {
         return new Apds9960ColorSensor<>(properties, comment, r, g, b);
     }

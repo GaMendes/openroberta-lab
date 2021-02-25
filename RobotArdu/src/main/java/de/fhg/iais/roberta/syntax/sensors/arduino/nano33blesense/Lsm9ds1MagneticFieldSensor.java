@@ -41,11 +41,6 @@ public class Lsm9ds1MagneticFieldSensor<V> extends BuiltinSensor<V> {
         setReadOnly();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitLsm9ds1MagneticFieldSensor(this);
-    }
-
     public static <V> Lsm9ds1MagneticFieldSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment, Var<V> x, Var<V> y, Var<V> z) {
         return new Lsm9ds1MagneticFieldSensor<>(properties, comment, x, y, z);
     }

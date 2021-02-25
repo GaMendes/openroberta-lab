@@ -27,12 +27,6 @@ public class NeuralNetworkInitRawData<V> extends Stmt<V> {
         return new StringBuilder().append("NeuralNetworkInitRawData []").toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkInitRawData(this);
-
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *

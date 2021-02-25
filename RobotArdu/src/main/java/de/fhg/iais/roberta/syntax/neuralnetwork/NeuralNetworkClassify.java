@@ -40,11 +40,6 @@ public class NeuralNetworkClassify<V> extends Stmt<V> {
         return "NeuralNetworkClassify[]";
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkClassify(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *

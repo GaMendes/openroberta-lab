@@ -72,11 +72,6 @@ public class NeuralNetworkSetup<V> extends Stmt<V> {
             .toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkSetup(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *

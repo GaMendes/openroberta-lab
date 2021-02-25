@@ -40,11 +40,6 @@ public class NeuralNetworkAddRawData<V> extends Stmt<V> {
         return new StringBuilder().append("NeuralNetworkAddRawData [ ").append(this.rawData).append("]").toString();
     }
 
-    @Override
-    protected V acceptImpl(IVisitor<V> visitor) {
-        return ((IArduinoVisitor<V>) visitor).visitNeuralNetworkAddRawData(this);
-    }
-
     /**
      * Transformation from JAXB object to corresponding AST object.
      *

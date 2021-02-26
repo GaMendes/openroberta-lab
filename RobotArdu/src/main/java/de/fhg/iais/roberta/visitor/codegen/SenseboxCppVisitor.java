@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.sensebox.PlotClearAction;
@@ -229,6 +230,11 @@ public class SenseboxCppVisitor extends AbstractCommonArduinoCppVisitor implemen
         nlIndent();
         this.sb.append("noTone(_buzzer_").append(toneAction.getPort()).append(");");
         return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        throw new DbcException("play note not supported");
     }
 
     @Override

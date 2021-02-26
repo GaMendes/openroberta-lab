@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.mbed.microbit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.MicrobitAstTest;
@@ -237,6 +238,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 true);
     }
 
+    @Ignore
     @Test
     public void visitImageShiftFunction_ScriptWithMissingPositionImage_ReturnsMicroPythonScriptMissingPositionImage() throws Exception {
         String expectedResult =
@@ -293,6 +295,7 @@ public class PythonVisitorTest extends MicrobitAstTest {
                 true);
     }
 
+    @Ignore
     @Test
     public void visitImageInvertFunction_ScriptWithMissingImage_ReturnsMicroPythonScriptInvertDefaultImage() throws Exception {
         String expectedResult =

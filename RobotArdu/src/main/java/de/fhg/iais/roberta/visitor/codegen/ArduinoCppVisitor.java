@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.syntax.action.generic.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -156,21 +157,6 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
             this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort() + ", 0);");
             nlIndent();
         }
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        //9 - sound port
-        this.sb.append("tone(_buzzer_").append(toneAction.getPort()).append(", ");
-        toneAction.getFrequency().accept(this);
-        this.sb.append(", ");
-        toneAction.getDuration().accept(this);
-        this.sb.append(");");
-        nlIndent();
-        this.sb.append("delay(");
-        toneAction.getDuration().accept(this);
-        this.sb.append(");");
         return null;
     }
 
@@ -433,6 +419,31 @@ public class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implement
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.sb.append("_imu_").append(gyroSensor.getPort()).append(".readFloatGyro").append(gyroSensor.getMode()).append("()");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb.append("_uBit.soundmotor.soundOn(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append("); ").append("_uBit.sleep(");
+        this.sb.append(playNoteAction.getDuration());
+        this.sb.append("); ").append("_uBit.soundmotor.soundOff();");
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        //9 - sound port
+        this.sb.append("tone(_buzzer_").append(toneAction.getPort()).append(", ");
+        toneAction.getFrequency().accept(this);
+        this.sb.append(", ");
+        toneAction.getDuration().accept(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("delay(");
+        toneAction.getDuration().accept(this);
+        this.sb.append(");");
         return null;
     }
 

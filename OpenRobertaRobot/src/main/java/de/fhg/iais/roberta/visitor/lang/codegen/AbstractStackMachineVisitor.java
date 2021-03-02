@@ -411,6 +411,10 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
             List<JSONObject> thenStmts = popOpArray();
             JSONObject ifTrue = mk(C.IF_TRUE_STMT, ifStmt).put(C.STMT_LIST, thenStmts);
             this.getOpArray().add(ifTrue);
+
+
+            JSONObject jump = mk(C.JUMP, ifStmt).put(C.IF_STMT, "Always").put(C.Y, this.getOpArray().size());
+            app(jump);
         }
         if ( !ifStmt.getElseList().get().isEmpty() ) {
             ifStmt.getElseList().accept(this);

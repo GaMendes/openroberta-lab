@@ -116,6 +116,7 @@ export const INFRARED: string = "infrared";
 export const INITIATE_BLOCK: string = "INITIATE_BLOCK";
 export const INSERT: string = "insert";
 export const ITEM: string = "item";
+export const JUMP: string = "jump";
 export const KIND: string = "kind";
 export const LANGUAGE: string = "language";
 export const LAST: string = "last";

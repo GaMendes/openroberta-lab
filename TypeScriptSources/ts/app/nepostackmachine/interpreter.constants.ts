@@ -1,5 +1,6 @@
 
 export const ADD: string = "ADD";
+export const ALWAYS: string = "always";
 export const AMBIENTLIGHT: string = "ambientlight";
 export const ANALOG: string = "analog";
 export const AND: string = "AND";
@@ -265,6 +266,7 @@ export const STOP_DRIVE: string = "stopDrive";
 export const STRING: string = "STRING";
 export const STRING_CONST: string = "STRING_CONST";
 export const SUM: string = "sum";
+export const TARGET: string = "target";
 export const TERMINATE_BLOCK: string = "TERMINATE_BLOCK";
 export const TEMPERATURE: string = "temperature";
 export const TERNARY_EXPR: string = "createTernaryExpr";

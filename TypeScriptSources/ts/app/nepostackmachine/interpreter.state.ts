@@ -13,7 +13,7 @@ export class State {
      *   if either the actual array of operations is exhausted or a C.FLOW_CONTROL operation is executed
      */
     private operations: any[];
-    private pc: number;
+    private _pc: number;
     private operationsStack: any[];
 
     private functions: any; // the hash map of function definitions
@@ -32,13 +32,18 @@ export class State {
     constructor(ops: any[], fct: any) {
         this.functions = fct;
         this.operations = ops;
-        this.pc = 0;
+        this._pc = 0;
         this.operationsStack = [];
         this.bindings = {};
         this.stack = [];
         this.currentBlocks = {};
         this.debugMode = false;
         // p( 'storeCode with state reset' );
+    }
+
+
+    set pc(value: number) {
+        this._pc = value;
     }
 
     /** returns the boolean debugMode */
@@ -220,16 +225,16 @@ export class State {
      * . @param ops the new array of operations. Its 'pc' is set to 0
      */
     public pushOps(ops: any[]) {
-        if (this.pc <= 0) {
-            U.dbcException('pc must be > 0, but is ' + this.pc);
+        if (this._pc <= 0) {
+            U.dbcException('pc must be > 0, but is ' + this._pc);
         }
-        this.pc--;
+        this._pc--;
         const opsWrapper = {};
         opsWrapper[C.OPS] = this.operations;
-        opsWrapper[C.PC] = this.pc;
+        opsWrapper[C.PC] = this._pc;
         this.operationsStack.unshift(opsWrapper);
         this.operations = ops;
-        this.pc = 0;
+        this._pc = 0;
         this.opLog('PUSHING STMTS');
     }
 
@@ -243,10 +248,10 @@ export class State {
      * is done. Be VERY careful, if you change the implementation of @see popOpsUntil().
      */
     public getOp() {
-        if (this.operations !== undefined && this.pc >= this.operations.length) {
+        if (this.operations !== undefined && this._pc >= this.operations.length) {
             this.popOpsUntil();
         }
-        return this.operations[this.pc++];
+        return this.operations[this._pc++];
     }
 
     /**
@@ -275,7 +280,7 @@ export class State {
                 }
                 if (target === undefined || suspendedStmt[C.OPCODE] === target) {
                     this.operations = opsWrapper[C.OPS];
-                    this.pc = opsWrapper[C.PC];
+                    this._pc = opsWrapper[C.PC];
                     return;
                 }
             }
@@ -288,7 +293,7 @@ export class State {
      * . @param msg the prefix of the message (for easy reading of the logs)
      */
     public opLog(msg: string) {
-        U.opLog(msg, this.operations, this.pc);
+        U.opLog(msg, this.operations, this._pc);
     }
 
     /** adds/removes block from currentBlocks and applies correct highlight to block**/

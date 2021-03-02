@@ -13,7 +13,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
         function State(ops, fct) {
             this.functions = fct;
             this.operations = ops;
-            this.pc = 0;
+            this._pc = 0;
             this.operationsStack = [];
             this.bindings = {};
             this.stack = [];
@@ -21,6 +21,13 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
             this.debugMode = false;
             // p( 'storeCode with state reset' );
         }
+        Object.defineProperty(State.prototype, "pc", {
+            set: function (value) {
+                this._pc = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
         /** returns the boolean debugMode */
         State.prototype.getDebugMode = function () {
             return this.debugMode;
@@ -185,16 +192,16 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * . @param ops the new array of operations. Its 'pc' is set to 0
          */
         State.prototype.pushOps = function (ops) {
-            if (this.pc <= 0) {
-                U.dbcException('pc must be > 0, but is ' + this.pc);
+            if (this._pc <= 0) {
+                U.dbcException('pc must be > 0, but is ' + this._pc);
             }
-            this.pc--;
+            this._pc--;
             var opsWrapper = {};
             opsWrapper[C.OPS] = this.operations;
-            opsWrapper[C.PC] = this.pc;
+            opsWrapper[C.PC] = this._pc;
             this.operationsStack.unshift(opsWrapper);
             this.operations = ops;
-            this.pc = 0;
+            this._pc = 0;
             this.opLog('PUSHING STMTS');
         };
         /**
@@ -207,10 +214,10 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * is done. Be VERY careful, if you change the implementation of @see popOpsUntil().
          */
         State.prototype.getOp = function () {
-            if (this.operations !== undefined && this.pc >= this.operations.length) {
+            if (this.operations !== undefined && this._pc >= this.operations.length) {
                 this.popOpsUntil();
             }
-            return this.operations[this.pc++];
+            return this.operations[this._pc++];
         };
         /**
          * unwind the stack of operation-arrays until
@@ -238,7 +245,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
                     }
                     if (target === undefined || suspendedStmt[C.OPCODE] === target) {
                         this.operations = opsWrapper[C.OPS];
-                        this.pc = opsWrapper[C.PC];
+                        this._pc = opsWrapper[C.PC];
                         return;
                     }
                 }
@@ -250,7 +257,7 @@ define(["require", "exports", "./interpreter.constants", "./interpreter.util"], 
          * . @param msg the prefix of the message (for easy reading of the logs)
          */
         State.prototype.opLog = function (msg) {
-            U.opLog(msg, this.operations, this.pc);
+            U.opLog(msg, this.operations, this._pc);
         };
         /** adds/removes block from currentBlocks and applies correct highlight to block**/
         State.prototype.processBlock = function (stmt) {

@@ -207,6 +207,13 @@ define(["require", "exports", "./interpreter.state", "./interpreter.constants", 
             else {
                 var opCode = stmt[C.OPCODE];
                 switch (opCode) {
+                    case C.JUMP: {
+                        var condition = stmt[C.CONDITIONAL];
+                        if (condition === C.ALWAYS || s.pop() == condition) {
+                            s.pc = stmt[C.TARGET];
+                            break;
+                        }
+                    }
                     case C.ASSIGN_STMT: {
                         var name_1 = stmt[C.NAME];
                         s.setVar(name_1, s.pop());

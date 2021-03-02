@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 public class C {
     public static final String ADD = "ADD";
+    public static final String ALWAYS = "always";
     public static final String AMBIENTLIGHT = "ambientlight";
     public static final String ANALOG = "analog";
     public static final String AND = "AND";
@@ -267,6 +268,7 @@ public class C {
     public static final String STRING = "STRING";
     public static final String STRING_CONST = "STRING_CONST";
     public static final String SUM = "sum";
+    public static final String TARGET = "target";
     public static final String TERMINATE_BLOCK = "TERMINATE_BLOCK";
     public static final String TEMPERATURE = "temperature";
     public static final String TERNARY_EXPR = "createTernaryExpr";

@@ -96,6 +96,8 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
+    public static final int JUMP_END_MARKER = -2;
+    public static final int JUMP_THEN_MARKER = -1;
     private JSONObject fctDecls = new JSONObject();
     private List<JSONObject> opArray = new ArrayList<>();
     private final List<List<JSONObject>> opArrayStack = new ArrayList<>();
@@ -395,34 +397,36 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitIfStmt(IfStmt<V> ifStmt) {
-        JSONObject stmtListEnd = mk(C.FLOW_CONTROL, ifStmt).put(C.KIND, C.IF_STMT).put(C.CONDITIONAL, false).put(C.BREAK, true);
         int numberOfThens = ifStmt.getExpr().size();
         if ( ifStmt.isTernary() ) {
             Assert.isTrue(numberOfThens == 1);
             Assert.isFalse(ifStmt.getElseList().get().isEmpty());
         }
-        pushOpArray();
+
+        List<JSONObject> jumpsToEnd = new ArrayList<>();
         // TODO: better a list of pairs. pair of lists needs this kind of for
         for ( int i = 0; i < numberOfThens; i++ ) {
             ifStmt.getExpr().get(i).accept(this);
-            pushOpArray();
+            // JUMP when condition not fullfilled
+            JSONObject jumpOverThen = mk(C.JUMP, ifStmt).put(C.CONDITIONAL, false).put(C.TARGET, JUMP_THEN_MARKER);
+            app(jumpOverThen);
             ifStmt.getThenList().get(i).accept(this);
-            this.getOpArray().add(stmtListEnd);
-            List<JSONObject> thenStmts = popOpArray();
-            JSONObject ifTrue = mk(C.IF_TRUE_STMT, ifStmt).put(C.STMT_LIST, thenStmts);
-            this.getOpArray().add(ifTrue);
 
+            // JUMP when if was fullfilled
+            JSONObject jumpToEnd = mk(C.JUMP, ifStmt).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, JUMP_END_MARKER);
+            app(jumpToEnd);
+            jumpsToEnd.add(jumpToEnd);
 
-            JSONObject jump = mk(C.JUMP, ifStmt).put(C.IF_STMT, "Always").put(C.Y, this.getOpArray().size());
-            app(jump);
+            jumpOverThen.put(C.TARGET, opArray.size());
         }
         if ( !ifStmt.getElseList().get().isEmpty() ) {
             ifStmt.getElseList().accept(this);
         }
-        this.getOpArray().add(stmtListEnd);
-        List<JSONObject> ifThenElseOps = popOpArray();
-        JSONObject o = mk(C.IF_STMT, ifStmt).put(C.STMT_LIST, ifThenElseOps);
-        return app(o);
+
+        jumpsToEnd
+            .forEach(jump -> jump.put(C.TARGET, opArray.size()));
+
+        return null;
     }
 
     @Override

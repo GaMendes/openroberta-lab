@@ -241,6 +241,13 @@ export class Interpreter {
         } else {
             const opCode = stmt[C.OPCODE];
             switch (opCode) {
+                case C.JUMP: {
+                    const condition = stmt[C.CONDITIONAL];
+                    if (condition === C.ALWAYS || s.pop() == condition) {
+                        s.pc = stmt[C.TARGET];
+                        break;
+                    }
+                }
                 case C.ASSIGN_STMT: {
                     const name = stmt[C.NAME];
                     s.setVar(name, s.pop());

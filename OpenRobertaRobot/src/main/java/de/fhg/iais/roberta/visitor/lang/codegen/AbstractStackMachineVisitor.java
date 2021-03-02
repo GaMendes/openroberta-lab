@@ -1,15 +1,6 @@
 package de.fhg.iais.roberta.visitor.lang.codegen;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.google.common.collect.Lists;
-
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -20,73 +11,16 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.*;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
-import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathCastCharFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathCastStringFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.*;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.*;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -94,14 +28,24 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.C;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor<V> {
     public static final int JUMP_END_MARKER = -2;
     public static final int JUMP_THEN_MARKER = -1;
+    public static final int BREAK_MARKER = -1;
+    public static final int CONTINUE_MARKER = -2;
     private JSONObject fctDecls = new JSONObject();
     private List<JSONObject> opArray = new ArrayList<>();
     private final List<List<JSONObject>> opArrayStack = new ArrayList<>();
     protected final ConfigurationAst configuration;
+    private final List<JSONObject> flowControlStatements = new ArrayList<>();
 
     protected AbstractStackMachineVisitor(ConfigurationAst configuration) {
         this.configuration = configuration;
@@ -510,20 +454,26 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
         }
 
         if ( mode == Mode.WHILE || mode == Mode.UNTIL ) {
-            pushOpArray();
-            repeatStmt.getExpr().accept(this);
-            List<JSONObject> expr = popOpArray();
-            pushOpArray();
-            repeatStmt.getList().accept(this);
-            List<JSONObject> body = popOpArray();
-            JSONObject cont = mk(C.REPEAT_STMT_CONTINUATION, repeatStmt).put(C.MODE, mode);
-            JSONObject repeat = mk(C.REPEAT_STMT, repeatStmt).put(C.MODE, mode).put(C.STMT_LIST, Arrays.asList(cont));
-            List<JSONObject> exprAndBody = new ArrayList<>();
-            exprAndBody.addAll(expr);
-            exprAndBody.add(mk(C.FLOW_CONTROL, repeatStmt).put(C.KIND, C.REPEAT_STMT).put(C.CONDITIONAL, true).put(C.BREAK, true).put(C.BOOLEAN, false));
-            exprAndBody.addAll(body);
-            cont.put(C.STMT_LIST, exprAndBody);
-            return app(repeat);
+            encloseFlowStatementScope(() -> {
+                int beforeExprTarget = opArray.size();
+                repeatStmt.getExpr().accept(this);
+                // no difference between WHILE and UNTIL because a NOT gets injected into UNTIL by jaxbToAST
+                JSONObject jumpOverWhile = mk(C.JUMP, repeatStmt).put(C.CONDITIONAL, false).put(C.TARGET, BREAK_MARKER);
+                flowControlStatements.add(jumpOverWhile);
+                app(jumpOverWhile);
+                repeatStmt.getList().accept(this);
+                app(mk(C.JUMP, repeatStmt).put(C.CONDITIONAL, "always").put(C.TARGET, beforeExprTarget));
+                flowControlStatements.forEach(flowControlStatement -> {
+                    if ( flowControlStatement.get(C.TARGET).equals(BREAK_MARKER) ) {
+                        flowControlStatement.put(C.TARGET, opArray.size());
+                    } else if ( flowControlStatement.get(C.TARGET).equals(CONTINUE_MARKER) ) {
+                        flowControlStatement.put(C.TARGET, beforeExprTarget);
+                    } else {
+                        throw new DbcException("Invalid flow control expression");
+                    }
+                });
+            });
+            return null;
         }
 
         throw new DbcException("invalid repeat mode: " + mode);
@@ -537,9 +487,8 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     @Override
     public final V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
-        boolean breakAndNotContinue = stmtFlowCon.getFlow() == Flow.BREAK;
-        String targetStmt = breakAndNotContinue ? C.REPEAT_STMT : C.REPEAT_STMT_CONTINUATION;
-        JSONObject o = mk(C.FLOW_CONTROL, stmtFlowCon).put(C.KIND, targetStmt).put(C.CONDITIONAL, false).put(C.BREAK, breakAndNotContinue);
+        JSONObject o = mk(C.JUMP, stmtFlowCon).put(C.CONDITIONAL, C.ALWAYS).put(C.TARGET, stmtFlowCon.getFlow() == Flow.BREAK ? BREAK_MARKER : CONTINUE_MARKER);
+        flowControlStatements.add(o);
         return app(o);
     }
 
@@ -953,5 +902,19 @@ public abstract class AbstractStackMachineVisitor<V> implements ILanguageVisitor
 
     public void setFctDecls(JSONObject fctDecls) {
         this.fctDecls = fctDecls;
+    }
+
+    /**
+     * Enclose the scope of flowControlStatements while runnable is run
+     * @param runnable
+     */
+    protected void encloseFlowStatementScope(Runnable runnable) {
+        List<JSONObject> flowControlTemp = new ArrayList<>(flowControlStatements);
+        flowControlStatements.clear();
+
+        runnable.run();
+
+        flowControlStatements.clear();
+        flowControlStatements.addAll(flowControlTemp);
     }
 }

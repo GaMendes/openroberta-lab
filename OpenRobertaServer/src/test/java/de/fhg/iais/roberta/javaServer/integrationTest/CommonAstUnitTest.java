@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -28,92 +30,149 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import org.xmlunit.diff.Diff;
+
+import javax.xml.bind.JAXBException;
+
+import static org.junit.Assert.fail;
 
 public class CommonAstUnitTest {
     private static final Logger LOG = LoggerFactory.getLogger(CommonAstUnitTest.class);
+    private static final String ROBOT_GROUP = "ev3";
+    private static final String ROBOT_NAME_FOR_COMMON_TESTS = "ev3lejosv1";
+    private static final String TARGET_DIR = "target/unitTests";
+    private static final String RESOURCE_BASE_COMMON = "/crossCompilerTests/common/";
+    private static final String RESOURCE_BASE_SPECIFIC = "/crossCompilerTests/robotSpecific/";
+    private static final boolean SHOW_SUCCESS = true;
+    private static final boolean STORE_DATA_INTO_FILES = false;
+    private static final boolean STORE_DATA_INTO_FILES_ON_ERROR = true;
+
     private static final List<String> pluginDefines = new ArrayList<>();
-    private static final List<String> pluginDefinesNewConf = new ArrayList<>();
-    protected static IRobotFactory testFactory;
-    protected static IRobotFactory testFactoryNewConf;
-    private static boolean showSuccess;
     private static JSONObject progDeclsFromTestSpec;
     private static JSONObject robotsFromTestSpec;
 
-    private static final String ROBOT_GROUP = "ev3";
-    private static final String ROBOT_NAME = "ev3lejosv1";
-    private static final String TARGET_DIR = "target/snitTests";
-    private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
+    private int errorCount = 0;
+    private int successCount = 0;
 
     @BeforeClass
     public static void setup() throws IOException {
-        List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
-        List<String> pluginDefinesNewConf = new ArrayList<>(); // maybe used later to add properties
-        String robotName = "nxt";
-        testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
-        testFactoryNewConf = Util.configureRobotPlugin(robotName, "", "", pluginDefinesNewConf);
-
         Path path = Paths.get(TARGET_DIR);
         Files.createDirectories(path);
-
         JSONObject testSpecification = Util.loadYAML("classpath:/crossCompilerTests/testSpec.yml");
-        showSuccess = testSpecification.getBoolean("showsuccess");
         progDeclsFromTestSpec = testSpecification.getJSONObject("progs");
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
-        LOG.info("testing XML and AST consistency for " + progDeclsFromTestSpec.length() + " programs");
     }
 
     @Test
     public void testCommonPartAsUnitTests() throws Exception {
-        String templateUnit = Util.readResourceContent(RESOURCE_BASE + "/template/commonAstUnit.xml");
-        JSONObject robotDeclFromTestSpec = robotsFromTestSpec.getJSONObject(ROBOT_NAME);
+        LOG.info("testing XML and AST consistency for " + progDeclsFromTestSpec.length() + " common programs");
+        List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
+        IRobotFactory testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);
+        String templateUnit = Util.readResourceContent(RESOURCE_BASE_COMMON + "/template/commonAstUnit.xml");
+        JSONObject robotDeclFromTestSpec = robotsFromTestSpec.getJSONObject(ROBOT_NAME_FOR_COMMON_TESTS);
         String robotDir = robotDeclFromTestSpec.getString("template");
-        String templateWithConfig = getTemplateWithConfigReplaced(robotDir, ROBOT_NAME);
+        String templateWithConfig = getTemplateWithConfigReplaced(robotDir, ROBOT_NAME_FOR_COMMON_TESTS);
         final String[] programNameArray = progDeclsFromTestSpec.keySet().toArray(new String[0]);
         Arrays.sort(programNameArray);
-        int errorCount = 0;
         nextProg: for ( String progName : programNameArray ) {
             LOG.info("processing program: " + progName);
             JSONObject progDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(progName);
-//            for unit tests, run all tests. Crashing crosscompiler etc. is no excuse!
-//            JSONObject exclude = progDeclFromTestSpec.optJSONObject("exclude");
-//            if ( exclude != null ) {
-//                for ( String excludeRobot : exclude.keySet() ) {
-//                    if ( excludeRobot.equals(ROBOT_GROUP) || excludeRobot.equals("ALL") ) {
-//                        LOG.info("########## for " + ROBOT_GROUP + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
-//                        continue nextProg;
-//                    }
-//                }
-//            }
             String generatedFinalXml = generateFinalProgram(templateWithConfig, progName, progDeclFromTestSpec);
             String generatedFragmentXml = generateFinalProgramFragment(templateUnit, progName, progDeclFromTestSpec);
-            storeGenerated(generatedFinalXml, "complete", progName + "Full", "xml");
-            storeGenerated(generatedFragmentXml, "fragment", progName, "xml");
-            BlockSet blockSet = JaxbHelper.xml2BlockSet(generatedFragmentXml);
-            Assert.assertEquals("3.1", blockSet.getXmlversion());
-            Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(testFactory);
-            ProgramAst<Void> generatedAst = transformer.blocks2Ast(blockSet);
-            List<Phrase<Void>> blocks = generatedAst.getTree().get(0);
-            StringBuilder sb = new StringBuilder();
-            for ( int i = 2; i < blocks.size(); i++ ) {
-                sb.append(blocks.get(i).toString()).append("\n");
+            if ( STORE_DATA_INTO_FILES ) {
+                storeDataIntoFiles(generatedFinalXml, "commonComplete", progName + "Full", "xml");
             }
-            storeGenerated(sb.toString(), "ast", progName, "ast");
-
-            // 1. check: the regenerated XML is the same as the supplied XML
-            Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, generatedFragmentXml);
-            Project project = builder.build();
-            String annotatedProgramXml = project.getAnnotatedProgramAsXml();
-            storeGenerated(annotatedProgramXml, "annotatedFragment", progName, "xml");
-            String diff = UnitTestHelper.runXmlUnit(generatedFragmentXml, annotatedProgramXml);
-            if (diff != null) {
-                LOG.error(diff);
-                errorCount++;
-            }
+            processProgramXml(progName, generatedFragmentXml, testFactory, "commonAst", "commonGenerated", "commonRegenerated");
         }
-        if (errorCount > 0) {
+        LOG.info("succeeding tests: " + successCount);
+        if ( errorCount > 0 ) {
             LOG.error("errors found: " + errorCount);
             Assert.fail("errors found: " + errorCount);
+        }
+    }
+
+    @Test
+    public void testRobotSpecificPartAsUnitTests() throws Exception {
+        LOG.info("testing XML and AST consistency for robot specific programs");
+        final String[] robotNameArray = robotsFromTestSpec.keySet().toArray(new String[0]);
+        Arrays.sort(robotNameArray);
+        for ( final String robotName : robotNameArray ) {
+            LOG.info("*** processing robot: " + robotName);
+            List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
+            IRobotFactory testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
+            JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
+            final String robotDir = robot.getString("dir");
+            final String resourceDirectory = RESOURCE_BASE_SPECIFIC + robotDir;
+            de.fhg.iais.roberta.util.FileUtils.fileStreamOfResourceDirectory(resourceDirectory). //
+                filter(f -> f.endsWith(".xml")).forEach(f -> extractProgramFragmentAndProcessProgramXml(f, robotName, resourceDirectory, testFactory));
+
+        }
+        LOG.info("succeeding tests: " + successCount);
+        if ( errorCount > 0 ) {
+            LOG.error("errors found: " + errorCount);
+            Assert.fail("errors found: " + errorCount);
+        }
+    }
+
+    private void extractProgramFragmentAndProcessProgramXml(
+        String fileNameWithRobotSpecificTestProgram,
+        String robotName,
+        String directoryWithPrograms,
+        IRobotFactory testFactory) //
+    {
+        int index = fileNameWithRobotSpecificTestProgram.lastIndexOf(".xml");
+        Assert.assertTrue(index > 0);
+        String progName = fileNameWithRobotSpecificTestProgram.substring(0, index);
+        LOG.info("processing program: " + progName);
+        String programFileName = directoryWithPrograms + "/" + fileNameWithRobotSpecificTestProgram;
+        String exportXmlText = Util.readResourceContent(programFileName);
+        Pair<String, String> progConfPair = ProjectWorkflowRestController.splitExportXML(exportXmlText);
+        String programXml = progConfPair.getFirst();
+        processProgramXml(progName, programXml, testFactory, robotName + "/specificAst", robotName + "/specificGenerated", robotName + "/specificRegenerated");
+    }
+
+    private void processProgramXml(
+        String programName,
+        String programXml,
+        IRobotFactory testFactory,
+        String directoryForAst,
+        String directoryForGenerated,
+        String directoryForRegenerated) //
+    {
+        if ( programName.equals("error") ) {
+            LOG.info("ignoring program error");
+            return;
+        }
+        BlockSet blockSet = null;
+        try {
+            blockSet = JaxbHelper.xml2BlockSet(programXml);
+        } catch ( JAXBException e ) {
+            Assert.fail("invalid program " + programName);
+        }
+        Assert.assertEquals("3.1", blockSet.getXmlversion());
+        Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(testFactory);
+        ProgramAst<Void> generatedAst = transformer.blocks2Ast(blockSet);
+        List<Phrase<Void>> blocks = generatedAst.getTree().get(0);
+        StringBuilder sb = new StringBuilder();
+        for ( int i = 2; i < blocks.size(); i++ ) {
+            sb.append(blocks.get(i).toString()).append("\n");
+        }
+        if ( STORE_DATA_INTO_FILES ) {
+            storeDataIntoFiles(sb.toString(), directoryForAst, programName, "ast");
+        }
+        // 1. check, that the regenerated XML is the same as the supplied XML
+        Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, programXml);
+        Project project = builder.build();
+        String regeneratedProgramXml = project.getAnnotatedProgramAsXml();
+        String diff = UnitTestHelper.runXmlUnit(programXml, regeneratedProgramXml);
+        if ( STORE_DATA_INTO_FILES || diff != null ) {
+            storeDataIntoFiles(programXml, directoryForGenerated, programName, "xml");
+            storeDataIntoFiles(regeneratedProgramXml, directoryForRegenerated, programName, "xml");
+        }
+        if ( diff != null ) {
+            LOG.error(diff);
+            errorCount++;
+        } else {
+            successCount++;
         }
     }
 
@@ -132,7 +191,7 @@ public class CommonAstUnitTest {
     }
 
     private static String getTemplateWithConfigReplaced(String robotDir, String robotName) {
-        String template = Util.readResourceContent(RESOURCE_BASE + "template/" + robotDir + ".xml");
+        String template = Util.readResourceContent(RESOURCE_BASE_COMMON + "template/" + robotDir + ".xml");
         Properties robotProperties = Util.loadProperties("classpath:/" + robotName + ".properties");
         String defaultConfigurationURI = robotProperties.getProperty("robot.configuration.default");
         String defaultConfig = Util.readResourceContent(defaultConfigurationURI);
@@ -156,14 +215,14 @@ public class CommonAstUnitTest {
 
     private static String read(String directoryName, String progNameWithXmlSuffix) {
         try {
-            return Util.readResourceContent(RESOURCE_BASE + directoryName + "/" + progNameWithXmlSuffix);
+            return Util.readResourceContent(RESOURCE_BASE_COMMON + directoryName + "/" + progNameWithXmlSuffix);
         } catch ( Exception e ) {
             // this happens, if no decl or fragment is available for the program given. This is legal.
             return null;
         }
     }
 
-    public static void storeGenerated(String source, String directory, String programName, String suffix) {
+    public static void storeDataIntoFiles(String source, String directory, String programName, String suffix) {
         try {
             File sourceFile = new File(TARGET_DIR + "/" + directory + "/" + programName + "." + suffix);
             FileUtils.writeStringToFile(sourceFile, source, StandardCharsets.UTF_8.displayName());

@@ -1,6 +1,3 @@
-crosscompilercall : true
-showsuccess: true
-
 robots:
     bob3:
         template: bob3

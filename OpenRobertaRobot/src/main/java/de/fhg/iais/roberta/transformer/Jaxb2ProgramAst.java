@@ -98,9 +98,6 @@ public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
     private Phrase<V> block2astByAnnotation(Block block, Class<?> astClass) {
         try {
             NepoPhrase classAnno = astClass.getAnnotation(NepoPhrase.class);
-            if ( !block.getType().equals(classAnno.containerType()) ) {
-                LOG.error("block and anno type don't match: " + block.getType() + " <==> " + classAnno.containerType());
-            }
             BlockType btc = BlockTypeContainer.getByName(classAnno.containerType());
             BlocklyBlockProperties bp = Jaxb2Ast.extractBlockProperties(block);
             BlocklyComment bc = Jaxb2Ast.extractComment(block);

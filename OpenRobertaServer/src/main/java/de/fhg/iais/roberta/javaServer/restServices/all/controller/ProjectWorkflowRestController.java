@@ -294,7 +294,7 @@ public class ProjectWorkflowRestController {
         return project.build();
     }
 
-    private static Pair<String, String> splitExportXML(String exportXmlAsString) {
+    public static Pair<String, String> splitExportXML(String exportXmlAsString) {
         String[] parts = exportXmlAsString.split("\\s*</program>\\s*<config>\\s*");
         String[] programParts = parts[0].split("<program>");
         String program = programParts[1];

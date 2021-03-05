@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
 import org.xml.sax.SAXException;
 
@@ -20,6 +18,10 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.worker.IWorker;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.DefaultNodeMatcher;
+import org.xmlunit.diff.Diff;
+import org.xmlunit.diff.ElementSelectors;
 
 public final class UnitTestHelper {
 
@@ -116,20 +118,14 @@ public final class UnitTestHelper {
         String programXml = Util.readResourceContent(programBlocklyXmlFilename);
         Project.Builder builder = setupWithProgramXML(factory, programXml);
         Project project = builder.build();
-        String annotatedProgramXml = project.getAnnotatedProgramAsXml();
-        XMLUnit.setIgnoreWhitespace(true);
-        Diff diff = XMLUnit.compareXML(programXml, annotatedProgramXml);
-        Assert.assertTrue(diff.toString(), diff.identical());
+        Assert.assertNull(runXmlUnit(programXml,project.getAnnotatedProgramAsXml()));
     }
 
     public static void checkConfigReverseTransformation(IRobotFactory factory, String configBlocklyXmlFilename) throws SAXException, IOException {
         String configXml = Util.readResourceContent(configBlocklyXmlFilename);
         Project.Builder builder = setupWithConfigXML(factory, configXml);
         Project project = builder.build();
-        String annotatedConfigXml = project.getAnnotatedConfigurationAsXml();
-        XMLUnit.setIgnoreWhitespace(true);
-        Diff diff = XMLUnit.compareXML(configXml, annotatedConfigXml);
-        Assert.assertTrue(diff.toString(), diff.identical());
+        Assert.assertNull(runXmlUnit(configXml,project.getAnnotatedConfigurationAsXml()));
     }
 
     public static void checkProgramAstEquality(IRobotFactory factory, String expectedAst, String programBlocklyXmlFilename) {
@@ -275,4 +271,24 @@ public final class UnitTestHelper {
         String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
         Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
     }
+
+    /**
+     * check whether the two XML Strings have differences
+     *
+     * @param expected
+     * @param transformed
+     * @return null, if no differences; the difference as String, if the XML differs
+     */
+    public static String runXmlUnit(String expected, String transformed) {
+        Diff diff =
+                DiffBuilder.compare(expected).withTest(transformed).withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byName))
+                        .ignoreWhitespace().ignoreElementContentWhitespace().ignoreComments()
+                        .checkForSimilar().build();
+        if ( diff.hasDifferences() ) {
+            return diff.toString();
+        } else {
+            return null;
+        }
+    }
+
 }

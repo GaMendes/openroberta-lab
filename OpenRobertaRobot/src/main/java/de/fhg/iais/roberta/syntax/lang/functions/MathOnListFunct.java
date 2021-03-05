@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -104,6 +105,9 @@ public class MathOnListFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
+        Mutation mutation = new Mutation();
+        mutation.setOp(getFunctName().name());
+        jaxbDestination.setMutation(mutation);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.LIST, getParam().get(0));
         return jaxbDestination;

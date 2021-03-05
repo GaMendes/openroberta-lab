@@ -539,7 +539,7 @@ public class CompilerWorkflowRobotCommonIT {
      * only one source file). All sources are logged.
      *
      * @param tokenDir the directory containing all programs generated for this token
-     * @param dir the program name, that is used as directory name for all artefacts, that belong to the program.
+     * @param programNameUsedAsDirectoryName the program name, that is used as directory name for all artefacts, that belong to the program.
      */
     private static void logProgramFromTokenDir(String tokenDir, String programNameUsedAsDirectoryName) {
         String sourceDir = tokenDir + "/" + programNameUsedAsDirectoryName + "/source";

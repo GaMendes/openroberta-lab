@@ -644,6 +644,7 @@ public interface ITransformerVisitor<V> extends ISensorVisitor<Phrase<V>>, IAllA
                 (Expr<V>) methodIfReturn.getCondition().modify(this),
                 methodIfReturn.getReturnType(),
                 (Expr<V>) methodIfReturn.getReturnValue().modify(this),
+                methodIfReturn.getValue(),
                 methodIfReturn.getProperty(),
                 methodIfReturn.getComment());
     }

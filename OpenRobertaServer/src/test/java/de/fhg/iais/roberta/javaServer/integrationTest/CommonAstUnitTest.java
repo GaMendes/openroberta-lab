@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -26,6 +28,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import org.xmlunit.diff.Diff;
 
 public class CommonAstUnitTest {
     private static final Logger LOG = LoggerFactory.getLogger(CommonAstUnitTest.class);
@@ -39,7 +42,7 @@ public class CommonAstUnitTest {
 
     private static final String ROBOT_GROUP = "ev3";
     private static final String ROBOT_NAME = "ev3lejosv1";
-    private static final String TARGET_DIR = "target/commonAstUnitTest";
+    private static final String TARGET_DIR = "target/snitTests";
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
     @BeforeClass
@@ -61,34 +64,33 @@ public class CommonAstUnitTest {
     }
 
     @Test
-    public void testCommonPart() throws Exception {
+    public void testCommonPartAsUnitTests() throws Exception {
         String templateUnit = Util.readResourceContent(RESOURCE_BASE + "/template/commonAstUnit.xml");
         JSONObject robotDeclFromTestSpec = robotsFromTestSpec.getJSONObject(ROBOT_NAME);
         String robotDir = robotDeclFromTestSpec.getString("template");
         String templateWithConfig = getTemplateWithConfigReplaced(robotDir, ROBOT_NAME);
         final String[] programNameArray = progDeclsFromTestSpec.keySet().toArray(new String[0]);
         Arrays.sort(programNameArray);
+        int errorCount = 0;
         nextProg: for ( String progName : programNameArray ) {
+            LOG.info("processing program: " + progName);
             JSONObject progDeclFromTestSpec = progDeclsFromTestSpec.getJSONObject(progName);
-            JSONObject exclude = progDeclFromTestSpec.optJSONObject("exclude");
-            if ( exclude != null ) {
-                for ( String excludeRobot : exclude.keySet() ) {
-                    if ( excludeRobot.equals(ROBOT_GROUP) || excludeRobot.equals("ALL") ) {
-                        LOG.info("########## for " + ROBOT_GROUP + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
-                        continue nextProg;
-                    }
-                }
-            }
+//            for unit tests, run all tests. Crashing crosscompiler etc. is no excuse!
+//            JSONObject exclude = progDeclFromTestSpec.optJSONObject("exclude");
+//            if ( exclude != null ) {
+//                for ( String excludeRobot : exclude.keySet() ) {
+//                    if ( excludeRobot.equals(ROBOT_GROUP) || excludeRobot.equals("ALL") ) {
+//                        LOG.info("########## for " + ROBOT_GROUP + " prog " + progName + " is excluded. Reason: " + exclude.getString(excludeRobot));
+//                        continue nextProg;
+//                    }
+//                }
+//            }
             String generatedFinalXml = generateFinalProgram(templateWithConfig, progName, progDeclFromTestSpec);
             String generatedFragmentXml = generateFinalProgramFragment(templateUnit, progName, progDeclFromTestSpec);
-            storeGeneratedProgram(generatedFinalXml, progName + "Full", "xml");
-            storeGeneratedProgram(generatedFragmentXml, progName, "xml");
+            storeGenerated(generatedFinalXml, "complete", progName + "Full", "xml");
+            storeGenerated(generatedFragmentXml, "fragment", progName, "xml");
             BlockSet blockSet = JaxbHelper.xml2BlockSet(generatedFragmentXml);
-            // Assume any program without or an empty xmlVersion is 2.0
-            String xmlversion = blockSet.getXmlversion();
-            if ( (xmlversion == null) || xmlversion.isEmpty() ) {
-                blockSet.setXmlversion("2.0");
-            }
+            Assert.assertEquals("3.1", blockSet.getXmlversion());
             Jaxb2ProgramAst<Void> transformer = new Jaxb2ProgramAst<>(testFactory);
             ProgramAst<Void> generatedAst = transformer.blocks2Ast(blockSet);
             List<Phrase<Void>> blocks = generatedAst.getTree().get(0);
@@ -96,7 +98,22 @@ public class CommonAstUnitTest {
             for ( int i = 2; i < blocks.size(); i++ ) {
                 sb.append(blocks.get(i).toString()).append("\n");
             }
-            storeGeneratedProgram(sb.toString(), progName, "ast");
+            storeGenerated(sb.toString(), "ast", progName, "ast");
+
+            // 1. check: the regenerated XML is the same as the supplied XML
+            Project.Builder builder = UnitTestHelper.setupWithProgramXML(testFactory, generatedFragmentXml);
+            Project project = builder.build();
+            String annotatedProgramXml = project.getAnnotatedProgramAsXml();
+            storeGenerated(annotatedProgramXml, "annotatedFragment", progName, "xml");
+            String diff = UnitTestHelper.runXmlUnit(generatedFragmentXml, annotatedProgramXml);
+            if (diff != null) {
+                LOG.error(diff);
+                errorCount++;
+            }
+        }
+        if (errorCount > 0) {
+            LOG.error("errors found: " + errorCount);
+            Assert.fail("errors found: " + errorCount);
         }
     }
 
@@ -146,11 +163,10 @@ public class CommonAstUnitTest {
         }
     }
 
-    public static void storeGeneratedProgram(String source, String programName, String suffix) {
+    public static void storeGenerated(String source, String directory, String programName, String suffix) {
         try {
-            File sourceFile = new File(TARGET_DIR + "/" + programName + "." + suffix);
+            File sourceFile = new File(TARGET_DIR + "/" + directory + "/" + programName + "." + suffix);
             FileUtils.writeStringToFile(sourceFile, source, StandardCharsets.UTF_8.displayName());
-            LOG.info("stored under: " + sourceFile.getPath());
         } catch ( Exception e ) {
             Assert.fail("Storing " + programName + " into directory " + TARGET_DIR + " failed");
         }

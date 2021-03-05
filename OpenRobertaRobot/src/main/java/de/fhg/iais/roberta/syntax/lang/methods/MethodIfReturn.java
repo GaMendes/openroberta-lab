@@ -27,13 +27,21 @@ public class MethodIfReturn<V> extends Method<V> {
     private final Expr<V> oraCondition;
     private final BlocklyType oraReturnType;
     private final Expr<V> oraReturnValue;
+    private final BigInteger value;
 
-    private MethodIfReturn(Expr<V> oraCondition, BlocklyType oraReturnType, Expr<V> oraReturnValue, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MethodIfReturn(
+        Expr<V> oraCondition,
+        BlocklyType oraReturnType,
+        Expr<V> oraReturnValue,
+        BigInteger value,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(BlockTypeContainer.getByName("METHOD_IF_RETURN"), properties, comment);
         Assert.isTrue(oraCondition != null && oraCondition.isReadOnly() && oraReturnType != null && oraReturnValue != null && oraReturnValue.isReadOnly());
         this.oraCondition = oraCondition;
         this.oraReturnType = oraReturnType;
         this.oraReturnValue = oraReturnValue;
+        this.value = value;
         setReadOnly();
     }
 
@@ -51,31 +59,28 @@ public class MethodIfReturn<V> extends Method<V> {
         Expr<V> condition,
         BlocklyType returnType,
         Expr<V> returnValue,
+        BigInteger value,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new MethodIfReturn<>(condition, returnType, returnValue, properties, comment);
+        return new MethodIfReturn<>(condition, returnType, returnValue, value, properties, comment);
     }
 
-    /**
-     * @return the condition
-     */
     public Expr<V> getCondition() {
         return this.oraCondition;
     }
 
-    /**
-     * @return the returnType
-     */
     @Override
     public BlocklyType getReturnType() {
         return this.oraReturnType;
     }
 
-    /**
-     * @return the returnValue
-     */
     public Expr<V> getReturnValue() {
         return this.oraReturnValue;
+    }
+
+
+    public BigInteger getValue() {
+        return this.value;
     }
 
     @Override
@@ -94,12 +99,14 @@ public class MethodIfReturn<V> extends Method<V> {
         List<Value> values = Jaxb2Ast.extractValues(block, (short) 2);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, BlocklyType.BOOLEAN));
         Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
-        String mode = block.getMutation().getReturnType() == null ? "void" : block.getMutation().getReturnType();
+        final Mutation mutation = block.getMutation();
+        String mode = mutation.getReturnType() == null ? "void" : mutation.getReturnType();
         return MethodIfReturn
             .make(
                 helper.convertPhraseToExpr(left),
                 BlocklyType.get(mode),
                 helper.convertPhraseToExpr(right),
+                mutation.getValue(),
                 Jaxb2Ast.extractBlockProperties(block),
                 Jaxb2Ast.extractComment(block));
     }
@@ -109,10 +116,11 @@ public class MethodIfReturn<V> extends Method<V> {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
-        mutation.setValue(BigInteger.ONE);
-        mutation.setReturnType(this.oraReturnType.getBlocklyName());
+        mutation.setValue(this.getValue());
+        if (!this.oraReturnType.equals(BlocklyType.VOID)) {
+            mutation.setReturnType(this.oraReturnType.getBlocklyName());
+        }
         jaxbDestination.setMutation(mutation);
-
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONDITION, getCondition());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, getReturnValue());
 
